@@ -1,0 +1,20 @@
+.vscode
+build
+
+# Logs
+logs
+*.log
+/logs
+
+# Deployment builds
+dist
+
+# Dependency directories
+node_modules
+npm/node_modules
+
+# NPM / Yarn
+.npm
+.node_repl_history
+npm-debug.log*
+.yarn

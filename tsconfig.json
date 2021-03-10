@@ -1,0 +1,14 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "target": "es5",
+        "removeComments": true,
+        //"outDir": "./server",
+        "sourceMap": false,
+        // "outFile": "js/app.js"
+    },
+    "files":[
+        "client/app.ts",
+        "server/server.ts"
+    ]
+}
