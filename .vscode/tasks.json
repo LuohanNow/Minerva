@@ -1,0 +1,32 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "type script build",
+            "type": "typescript",
+            "tsconfig": "tsconfig.json",
+            "problemMatcher": [
+                "$tsc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "run server",
+            "command": "node",    
+            "args": ["dist/server/server.js"]
+        },
+        {
+            "label": "open client app",
+            "command": "explorer",    
+            "windows": {
+                "command": "explorer.exe"
+            },
+            "args": ["dist/client/index.html"]
+        }
+    ]
+}

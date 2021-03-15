@@ -1,10 +1,17 @@
 {
     "compileOnSave": true,
     "compilerOptions": {
-        "target": "es5",
+        "target": "es6",
+        "module": "commonjs",
+        "lib": ["es6"], 
         "removeComments": true,
-        //"outDir": "./server",
+        //"rootDir": "src", 
+        "outDir": "dist",
+        "strict": true,
+        "noImplicitAny": true,
+        "esModuleInterop": true, /* Enable incremental compilation */
         "sourceMap": false,
+        "resolveJsonModule": true
         // "outFile": "js/app.js"
     },
     "files":[
