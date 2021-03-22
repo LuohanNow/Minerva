@@ -1,0 +1,21 @@
+General:
+    ✔ fix configuration @done(21-03-21 19:42)
+    ✔ log to file @done(21-03-22 20:10)
+    ☐ separate building, separate makefile?
+    ☐ docker?
+    ✔ to undestand node environment NODE_ENV @done(21-03-22 20:07) 
+    I do not think that we should storage configuration into system environment, all configuration should be in the configuration file only
+    ☐ auth?!
+    ☐ to establish error code and description conversation between server and client
+    ☐ add additional folder assets and docs?
+    ☐ injections?
+    ☐ test framework?
+    ☐ check convict, webpack, lerna, gulpjs, appveyor, jest
+
+Server:
+    ✔ add database @done(21-03-22 22:02)
+    ☐ provide getting swagger contract
+    ☐ true RESTful with params or simple web api?
+
+App:
+    ☐ cross platform hello world
