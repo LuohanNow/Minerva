@@ -23,7 +23,7 @@ export let getDocument = (req: Request, res: Response) => {
 };
 
 export let deleteDocument = (req: Request, res: Response) => {
-    let document = Document.remove({ _id: req.params.id }, (err: any) => {
+    let document = Document.findByIdAndDelete({ _id: req.params.id }, null, (err: any) => {
         if (err) {
           res.send(err);
         } else {

@@ -14,6 +14,8 @@ General:
 
 Server:
     ✔ add database @done(21-03-22 22:02)
+    ✔ add cloud database @done(21-03-23 21:10)
+    ☐ rest crud draft
     ☐ provide getting swagger contract
     ☐ true RESTful with params or simple web api?
 

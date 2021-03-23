@@ -4,13 +4,9 @@ const config = require('config');
 
 const uri: string =  config.get('database.uri');
 
-mongoose.connect(uri, (err: any) => {
-  if (err) {
-    console.log(err.message);
-  } else {
-    console.log("Successfully Connected!");
-  }
-});
+mongoose.connect(uri,  { useNewUrlParser: true, useCreateIndex: true, useFindAndModify: false })
+.then(() => console.log('MongoDB Connected...'))
+.catch(err => console.log(err));
 
 
 export interface IDocument extends mongoose.Document {
@@ -38,7 +34,7 @@ export const DocumentSchema = new mongoose.Schema({
   last_edited_by: { type: String, required: true },
   markup: { type: String, required: true },
   note_history:  { type: String, required: false }
-});
+}); // { _id: false });
 
 const Document = mongoose.model<IDocument>("Document", DocumentSchema);
 export default Document;

@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import winston from 'winston'
-import * as documentController from "./controllers/documentController";
+import * as documentController from "./controllers/DocumentController";
 
 process.env['NODE_CONFIG_DIR'] = __dirname + '/config/';
 const config = require('config');
