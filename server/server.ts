@@ -1,10 +1,17 @@
 import express, { Request, Response } from 'express';
 import winston from 'winston'
 import * as documentController from "./controllers/DocumentController";
+import mongoose = require("mongoose");
 
 process.env['NODE_CONFIG_DIR'] = __dirname + '/config/';
 const config = require('config');
 
+const uri: string =  config.get('database.uri');
+
+
+mongoose.connect(uri,  { useNewUrlParser: true, useCreateIndex: true, useFindAndModify: false }) //why last is false?
+.then(() => console.log('MongoDB Connected...'))
+.catch(err => console.log(err));
 
 
 let logger: winston.Logger = winston.createLogger({
@@ -25,6 +32,9 @@ const app: express.Application = express();
 //app.use((req: express.Request, res: express.Response, next) => {
   //logger.log('info', 'recevie request: ', { request: req });
 //});
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req: express.Request, res: express.Response) => {
   res.send('Server: hello!'); //to do return swagger contract

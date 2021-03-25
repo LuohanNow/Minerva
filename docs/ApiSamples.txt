@@ -1,3 +1,37 @@
-get http://localhost:3000/document/6058e935ec25aff5fd96d93e
+get http://localhost:3000/document/605a29ccc6017ad5c581dbe0
 get http://localhost:3000/documents
+
+post http://localhost:3000/document
+
+{
+    "url": "test number insert test",
+    "title": "test  number insert test",
+    "subtitle": "",
+    "body": "this is just demonstration  insert test",
+    "tags": ["test", "test2", "test3"],
+    "updated": "03/21/2021 04:11",
+    "created": "03/21/2021 04:11",
+    "lastEditedBy": "emperor insert",
+    "markup": "markdown",
+    "docHistory": ""
+}
+
+delete http://localhost:3000/document/*EXISTING ID*
+
+put http://localhost:3000/document/605a29ccc6017ad5c581dbe0
+
+{
+    "url": "test number update test",
+    "title": "test  number update test",
+    "subtitle": "",
+    "body": "this is just demonstration  update test",
+    "tags": ["test", "test2", "test3"],
+    "updated": "03/21/2021 04:11",
+    "created": "03/21/2021 04:11",
+    "lastEditedBy": "emperor update",
+    "markup": "markdown",
+    "docHistory": ""
+}
+
+
 

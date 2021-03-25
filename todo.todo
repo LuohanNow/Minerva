@@ -5,7 +5,7 @@ General:
     ☐ docker?
     ✔ to undestand node environment NODE_ENV @done(21-03-22 20:07) 
     I do not think that we should storage configuration into system environment, all configuration should be in the configuration file only
-    ☐ auth?!
+    ☐ auth?! passportjs. oauth2orize
     ☐ to establish error code and description conversation between server and client
     ☐ add additional folder assets and docs?
     ☐ injections?
@@ -15,7 +15,9 @@ General:
 Server:
     ✔ add database @done(21-03-22 22:02)
     ✔ add cloud database @done(21-03-23 21:10)
-    ☐ rest crud draft
+    ☐ rest crud endpoints draft
+    ☐ add async in controller's methods?
+    ☐ deploy server on heroku
     ☐ provide getting swagger contract
     ☐ true RESTful with params or simple web api?
 
