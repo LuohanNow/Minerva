@@ -12,7 +12,6 @@ export let allDocuments = (req: Request, res: Response) => {
 };
 
 export let getDocument = (req: Request, res: Response) => {
-    console.log(`test`);
     let document = Document.findById(req.params.id, (err: any, document: any) => {
         if (err) {
           res.send(err);

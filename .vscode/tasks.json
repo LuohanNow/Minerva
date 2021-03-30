@@ -11,17 +11,12 @@
         {
             "label": "build web client",
             "type": "shell",
-            "command": "(npm run build --prefix ./client/web) -and (mv ./client/web/build/* dist/client/web)"
-        },
-        {
-            "label": "run post-build web client",
-            "type": "shell",
-            "command": "npm start --prefix ./dist/client/web"
+            "command": "npm run build --prefix ./client/web"
         },
         {
             "label": "run server",
             "command": "node",    
-            "args": ["dist/server/server.js"]
+            "args": ["server/dist/server.js"]
         },
         {
             "label": "open client app",

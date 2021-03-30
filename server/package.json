@@ -1,5 +1,5 @@
 {
-  "name": "Minerva",
+  "name": "minerva.server",
   "version": "1.0.0",
   "dependencies": {
     "config": "^3.3.6",
@@ -9,22 +9,13 @@
     "winston": "^3.3.3"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc --build",
+    "clean": "tsc --build --clean",
     "start": "node ."
   },
   "description": "\"# Minerva - personal knowledge base app\"",
-  "main": "dist/index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/WarCloud47/Minerva.git"
-  },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/WarCloud47/Minerva/issues"
-  },
-  "homepage": "https://github.com/WarCloud47/Minerva#readme",
   "devDependencies": {
     "@types/config": "0.0.38",
     "@types/express": "^4.17.11",
