@@ -14,8 +14,4 @@
         "resolveJsonModule": true
         // "outFile": "js/app.js"
     },
-    "files":[
-        "client/app.ts",
-        "server/server.ts"
-    ]
 }

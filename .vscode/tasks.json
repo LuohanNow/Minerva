@@ -4,16 +4,19 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "type script build",
-            "type": "typescript",
-            "tsconfig": "tsconfig.json",
-            "problemMatcher": [
-                "$tsc"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
+            "label": "run pre-build web client",
+            "type": "shell",
+            "command": "npm start --prefix ./client/web"
+        },
+        {
+            "label": "build web client",
+            "type": "shell",
+            "command": "(npm run build --prefix ./client/web) -and (mv ./client/web/build/* dist/client/web)"
+        },
+        {
+            "label": "run post-build web client",
+            "type": "shell",
+            "command": "npm start --prefix ./dist/client/web"
         },
         {
             "label": "run server",
