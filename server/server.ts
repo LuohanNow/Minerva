@@ -2,11 +2,14 @@ import express, { Request, Response } from 'express';
 import winston from 'winston'
 import * as documentController from "./controllers/DocumentController";
 import mongoose = require("mongoose");
+import * as dotenv from "dotenv";
 
-process.env['NODE_CONFIG_DIR'] = __dirname + '/config/';
-const config = require('config');
+///process.env['NODE_CONFIG_DIR'] = __dirname + '/config/';
+//const config = require('config');
 
-const uri: string =  config.get('database.uri');
+dotenv.config({ path: __dirname+'/.env' });
+
+const uri: any =  process.env.DB_CONN; //config.get('database.uri');
 
 
 mongoose.connect(uri,  { useNewUrlParser: true, useCreateIndex: true, useFindAndModify: false }) //why last is false?
@@ -23,7 +26,7 @@ let logger: winston.Logger = winston.createLogger({
   ],
 });
 
-const port: number = config.get('server.port');
+const port: any = process.env.PORT;//config.get('server.port');
 console.log(`Application port: ${port}`);
 const app: express.Application = express();
 //const productRouter: express.Router = express.Router();
