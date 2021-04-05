@@ -1,7 +1,7 @@
-get http://localhost:3000/document/605a29ccc6017ad5c581dbe0
-get http://localhost:3000/documents
+get https://minerva-server-app.herokuapp.com/document/605a29ccc6017ad5c581dbe0
+get https://minerva-server-app.herokuapp.com/documents
 
-post http://localhost:3000/document
+post https://minerva-server-app.herokuapp.com/document
 
 {
     "url": "test number insert test",
@@ -16,9 +16,9 @@ post http://localhost:3000/document
     "docHistory": ""
 }
 
-delete http://localhost:3000/document/*EXISTING ID*
+delete https://minerva-server-app.herokuapp.com/document/*EXISTING ID*
 
-put http://localhost:3000/document/605a29ccc6017ad5c581dbe0
+put https://minerva-server-app.herokuapp.com/document/605a29ccc6017ad5c581dbe0
 
 {
     "url": "test number update test",
