@@ -3,9 +3,25 @@ import winston from 'winston'
 import * as documentController from "./controllers/DocumentController";
 import mongoose = require("mongoose");
 import * as dotenv from "dotenv";
+import cors from "cors";
 
 ///process.env['NODE_CONFIG_DIR'] = __dirname + '/config/';
 //const config = require('config');
+
+const options: cors.CorsOptions = {
+  allowedHeaders: [
+    'Origin',
+    'X-Requested-With',
+    'Content-Type',
+    'Accept',
+    'X-Access-Token',
+  ],
+  credentials: true,
+  methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
+  //origin: API_URL,
+  preflightContinue: false,
+};
+
 
 dotenv.config({ path: __dirname+'/.env' });
 
@@ -38,6 +54,7 @@ const app: express.Application = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors(options));
 
 app.get('/', (req: express.Request, res: express.Response) => {
   res.send('Server: hello!'); //to do return swagger contract
