@@ -1,10 +1,14 @@
 /* eslint-disable */
-import { Button, Grid, IconButton, List, ListItem, ListItemSecondaryAction, ListItemText } from '@material-ui/core';
+import { 
+  AppBar, Button, Grid, IconButton, InputBase, List, ListItem, ListItemSecondaryAction, 
+  ListItemText, TextField, Toolbar, Typography } 
+from '@material-ui/core';
 import { ApiService } from './ApiService';
 import { MarkdownEditor } from './components/MarkdownEditor/MarkdownEditor';
 import { Document, DocumentWithoutId } from './models/Document';
-import { Edit, Delete} from '@material-ui/icons';
+import { AccountCircle, Edit, Delete, Menu, Search } from '@material-ui/icons';
 import { useEffect, useRef, useState } from 'react';
+import "./App.scss";
 
 function App() {
 
@@ -13,6 +17,7 @@ function App() {
   }
 
   const [documents, setDocuments] = useState<Array<Document>>([]);
+  const [title, setTitle] = useState<string>("");
 
   function getAllDocuments(): Array<Document> {
     const apiService = new ApiService(); 
@@ -69,6 +74,7 @@ function App() {
 
   const handleListItemClick = ( event: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => {
     markdownEditor.current?.vditor.setValue(JSON.stringify(documents[index],null,2));
+    setTitle(documents[index].title);
   };
 
   const handleButtonEditItemClick = ( event: React.MouseEvent<HTMLButtonElement, MouseEvent>, index: number) => {
@@ -119,15 +125,49 @@ function App() {
     deleteDocumentById(idDocument);
     setDocuments(documents.filter(item => item !== documents[index]));
   };
+
+  function handleChangeTitle(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {
+    setTitle(e.target.value);
+  }
     
   return (
     <div className="App">
       <div> 
-      <Grid container>
+        <Grid container>
+          <Grid item xs={12}>
+          <div className="main-appbar">
+            <AppBar color="primary" position="static">
+            <Toolbar>
+              <IconButton edge="start" color="inherit">
+                <Menu />
+              </IconButton>
+              <Typography variant="h5">
+                {"Minerva"}
+              </Typography>
+              <div className="main-toolbar-search">
+                <div className="search-icon">
+                  <Search />
+                </div>
+                <InputBase
+                  placeholder="Search…"
+                  className="search-field"
+                />
+              </div>
+              <IconButton edge = "end"
+                  color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+            </Toolbar>
+          </AppBar>
+        </div>
+        </Grid>
         <Grid item xs={3}>
+          <div className="document-list">
           <List dense={true}>
                 {documents.map( (item, index) => {
                   return(
+                    <div className="document-list-item">
                     <ListItem  
                       key={item._id} 
                       button
@@ -144,23 +184,25 @@ function App() {
                         <Delete />
                       </IconButton>
                     </ListItemSecondaryAction>
-                  </ListItem>)
-                  }
+                  </ListItem>
+                  </div>
+                  )}
                 )}
           </List>
+          </div>
         </Grid>
         <Grid item xs={9}>
-          <MarkdownEditor ref={markdownEditor}/>
-        </Grid>
-      </Grid>
-      <Grid container>
-        <Grid item xs={3}>
-          <Button onClick={addDocument}
-          style={{margin: "10%"}}
-          variant="outlined" 
-          color="secondary">
-            {"Добавить документ"}
-          </Button>
+          <div className="document-title">
+            <TextField onChange={handleChangeTitle} 
+              value={title} 
+              label="Заголовок документа" 
+              variant="outlined" 
+              fullWidth
+            />
+          </div>
+          <div className="markdown-editor">
+            <MarkdownEditor ref={markdownEditor}/>
+          </div>
         </Grid>
       </Grid>
       </div>

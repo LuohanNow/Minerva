@@ -1,0 +1,55 @@
+.main-appbar{
+  .MuiAppBar-colorPrimary{
+    background-color: mediumseagreen;
+  }
+}
+
+.document-list {
+  .document-list-item{
+    &:hover{
+      background-color: lightgreen;
+    }
+  }
+}
+
+.document-title {
+  padding: 10px 0px;
+}
+
+.main-toolbar-search {
+  background-color: fade-out(white, 0.35);
+  position: relative;
+  border-radius: 15px;
+  width: auto;
+  margin-left: auto;
+
+  &:hover {
+    background-color: fade-out(white, 0.25);
+  }
+  
+  .search-icon {
+    padding: 0px 4px;
+    height: 100%;
+    position: absolute;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .search-field{
+    padding: 1px 1px 1px 0px;
+    padding-left: calc(2em);
+    width: 100%;
+    
+    .MuiInputBase-input {
+      width: 15ch;
+
+      &:focus, &:active {
+        width: 25ch;
+      }
+    }
+
+   
+  }
+}
