@@ -11,14 +11,14 @@ export class MarkdownEditor extends React.Component {
       height: 800,
       lang: 'en_US',
       icon: 'material',
-      outline: { enable: true, position: "left"},
       toolbarConfig: {
         pin: true
       },
+      mode: "wysiwyg",
       cache: {
         enable: false,
       },
-    })
+    });
   }
   render () {
     return e(
