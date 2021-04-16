@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import Document from "./../document";
+import Document from "../models/document";
 
 export let allDocuments = (req: Request, res: Response) => {
     let documents = Document.find((err: any, documents: any) => {
