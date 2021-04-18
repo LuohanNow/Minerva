@@ -1,166 +1,214 @@
 /* eslint-disable */
-import { Button, Grid, IconButton, List, ListItem, ListItemSecondaryAction, ListItemText } from '@material-ui/core';
+import { 
+  AppBar, Button, createMuiTheme, Grid, IconButton, InputBase, List, ListItem, ListItemSecondaryAction, 
+  ListItemText, TextField, ThemeProvider, Toolbar, Typography } 
+from '@material-ui/core';
 import { ApiService } from './ApiService';
 import { MarkdownEditor } from './components/MarkdownEditor/MarkdownEditor';
-import { Document, DocumentWithoutId } from './models/Document';
-import { Edit, Delete} from '@material-ui/icons';
+import { Document } from './models/Document';
+import { AccountCircle, Delete, Menu, Save, Search } from '@material-ui/icons';
 import { useEffect, useRef, useState } from 'react';
+import "./App.scss";
+import { lightGreen } from '@material-ui/core/colors';
+
+const theme = createMuiTheme({
+  palette: {
+    primary: lightGreen,
+  },
+});
 
 function App() {
-
-  function randText(): string {
-    return Math.random().toString(36).substring(7);
-  }
-
+  const markdownEditor = useRef<MarkdownEditor>(null);
   const [documents, setDocuments] = useState<Array<Document>>([]);
+  const [editingDocument, setEditingDocument] = useState<Document>({
+    body: " ",
+    created: new Date().toString(),
+    docHistory: " ",
+    lastEditBy: " ",
+    lastEditedBy: " ",
+    markup: " ",
+    subtitle: " ",
+    tags: [],
+    title: " ",
+    updated: new Date().toString(),
+    url: " ",
+    _id: ""
+  });
 
-  function getAllDocuments(): Array<Document> {
-    const apiService = new ApiService(); 
-  
-    void (async () => {
-        apiService.GetAllDocuments()
-        .then(result => {
-          setDocuments(result);
-        }); 
-    })();
-    return documents;
-  }
-
-  function updateDocumentById(id: string, documentBody: DocumentWithoutId): void {
-    const apiService = new ApiService(); 
-  
-    void (async () => {
-        apiService.UpdateDocumentById(id, documentBody)
-        .then(isOk => {
-          console.log(isOk);
-        }); 
-    })();
-  }
-
-  function addNewDocument(documentBody: DocumentWithoutId): void {
-    const apiService = new ApiService(); 
-  
-    void (async () => {
-        apiService.AddDocument(documentBody)
-        .then(result => {
-          setDocuments([...documents, result]);
-        }); 
-    })();
-  }
-
-  function deleteDocumentById(id: string): void {
-    const apiService = new ApiService(); 
-  
-    void (async () => {
-        apiService.DeleteDocumentById(id)
-        .then(isOk => {
-          if(isOk) {
-            console.log(isOk);
-          }
-        }); 
-    })();
-  }
-
+  /**
+   * Load all documents on mount component
+   */
   useEffect(() => {
-    getAllDocuments();
+    const apiService = new ApiService(); 
+    void (async () => {
+      const result = await apiService.GetAllDocuments()
+      setDocuments(result);
+    })();
   }, []); 
 
-  const markdownEditor = useRef<MarkdownEditor>(null);
+  /**
+   * Load document to markdown editor 
+   * when editingDocument change
+   */
+  useEffect(() => {
+    try {
+      markdownEditor.current?.vditor.setValue(editingDocument.body);
+    } catch (error) {}
+  }, [editingDocument._id]); 
 
-  const handleListItemClick = ( event: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => {
-    markdownEditor.current?.vditor.setValue(JSON.stringify(documents[index],null,2));
+
+  const documentListItemClick = ( event: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => {
+    setEditingDocument(documents[index]);
   };
 
-  const handleButtonEditItemClick = ( event: React.MouseEvent<HTMLButtonElement, MouseEvent>, index: number) => {
+  function saveDocument(): void {
+    const apiService = new ApiService();
 
-    const idDocument = documents[index]._id;
-    const randomText = randText();
-    documents[index].title = randomText
-    setDocuments([...documents]);
+    editingDocument.body = markdownEditor.current?.vditor.getValue(); 
+    editingDocument.updated = new Date().toString(); 
 
-    const data: DocumentWithoutId = {
-      url: "Какой-то URL",
-      title: randomText,
-      subtitle: "",
-      body: "this is just demonstration  update test",
-      tags: ["test", "test2", "test3"],
-      updated: "03/21/2021 04:11",
-      created: "03/21/2021 04:11",
-      lastEditedBy: "emperor update",
-      markup: "markdown",
-      lastEditBy:"",
-      docHistory: ""
-    };
-  
-    updateDocumentById(idDocument, data);
-  };
+    const { ["_id"]: id, ...savingDocument } = editingDocument;
 
-  function addDocument(): void {
-    
-    const data: DocumentWithoutId = {
-      url: randText(),
-      title: randText(),
-      subtitle: randText(),
-      body: randText(),
-      tags: [randText(), randText(), randText()],
-      updated: "03/21/2021 04:11",
-      created: "03/21/2021 04:11",
-      lastEditedBy:randText(),
-      markup: "markdown",
-      lastEditBy:"",
-      docHistory: ""
-    };
+    // if id define then update document
+    // else add new
+    if (id) {
+      void (async () => {
+      const isDocumentUpdated = await apiService.UpdateDocumentById(id, savingDocument);
+      
+      if(isDocumentUpdated) {
+        let updatedDocument = documents.find(document => document._id === id);
 
-    addNewDocument(data);
+        if (updatedDocument) {
+          updatedDocument.body = savingDocument.body;
+          updatedDocument.created = savingDocument.created;
+          updatedDocument.docHistory = savingDocument.docHistory;
+          updatedDocument.lastEditBy = savingDocument.lastEditBy;
+          updatedDocument.lastEditedBy = savingDocument.lastEditedBy;
+          updatedDocument.markup = savingDocument.markup;
+          updatedDocument.subtitle = savingDocument.subtitle;
+          updatedDocument.tags = savingDocument.tags;
+          updatedDocument.title = savingDocument.title;
+          updatedDocument.updated = savingDocument.updated;
+          updatedDocument.url = savingDocument.url;
+          setDocuments([...documents]);
+        }
+      }
+      })();
+    }
+    else {
+      void (async () => {
+        const result = await apiService.AddDocument(savingDocument)
+        setDocuments([...documents, result]);
+      })();
+    }
   }
 
-  const handleButtonDeleteItemClick = ( event: React.MouseEvent<HTMLButtonElement, MouseEvent>, index: number) => {
+  /**
+   * Delete document
+   * @param event 
+   * @param index 
+   */
+  const deleteDocument = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, index: number) => {
     const idDocument = documents[index]._id;
-    deleteDocumentById(idDocument);
-    setDocuments(documents.filter(item => item !== documents[index]));
+    const apiService = new ApiService();
+
+    void (async () => {
+      apiService.DeleteDocumentById(idDocument)
+      .then(isOk => {
+        if(isOk) {
+          setDocuments(documents.filter(item => item !== documents[index]));
+        }
+      }); 
+    })();
   };
+
+  function handleChangeTitle(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {
+    setEditingDocument({...editingDocument, title: e.target.value});
+  }
     
   return (
     <div className="App">
       <div> 
-      <Grid container>
+        <Grid container>
+          <Grid item xs={12}>
+          <div className="main-appbar">
+            <AppBar color="primary" position="static">
+            <Toolbar>
+              <IconButton edge="start" color="inherit">
+                <Menu />
+              </IconButton>
+              <Typography variant="h5">
+                {"Minerva"}
+              </Typography>
+              <div className="main-toolbar-search">
+                <div className="search-icon">
+                  <Search />
+                </div>
+                <InputBase
+                  placeholder="Search…"
+                  className="search-field"
+                />
+              </div>
+              <IconButton edge = "end"
+                  color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+            </Toolbar>
+          </AppBar>
+        </div>
+        </Grid>
         <Grid item xs={3}>
+          <div className="document-list">
           <List dense={true}>
                 {documents.map( (item, index) => {
                   return(
+                    <div className="document-list-item">
                     <ListItem  
                       key={item._id} 
                       button
-                      onClick={(event) => handleListItemClick(event, index)}
+                      onClick={(event) => documentListItemClick(event, index)}
                     >
                     <ListItemText
                       primary={item.title}
                     />
                     <ListItemSecondaryAction>
-                    <IconButton onClick={(event) => handleButtonEditItemClick(event, index)} edge="end" aria-label="edit">
-                        <Edit />
-                      </IconButton>
-                      <IconButton onClick={(event) => handleButtonDeleteItemClick(event, index)} edge="end" aria-label="delete">
+                      <IconButton onClick={(event) => deleteDocument(event, index)} edge="end" aria-label="delete">
                         <Delete />
                       </IconButton>
                     </ListItemSecondaryAction>
-                  </ListItem>)
-                  }
+                  </ListItem>
+                  </div>
+                  )}
                 )}
           </List>
+          </div>
         </Grid>
         <Grid item xs={9}>
-          <MarkdownEditor ref={markdownEditor}/>
+        <Grid container>
+          <Grid className="document-title" item xs={10}>
+            <TextField onChange={handleChangeTitle} 
+                value={editingDocument.title} 
+                label="Заголовок документа" 
+                variant="outlined" 
+                fullWidth
+            />
+          </Grid>
+          <Grid className="btn-save" item xs={2}>
+          <ThemeProvider theme={theme}>
+            <Button variant="contained" 
+              color="primary"
+              startIcon={<Save />}
+              onClick={saveDocument}
+            >
+                {"Сохранить"}
+            </Button>
+          </ThemeProvider>
+          </Grid>
         </Grid>
-      </Grid>
-      <Grid container>
-        <Grid item xs={3}>
-          <Button onClick={addDocument}
-          style={{margin: "10%"}}
-          variant="outlined" 
-          color="secondary">
-            {"Добавить документ"}
-          </Button>
+        <div className="markdown-editor">
+          <MarkdownEditor ref={markdownEditor}/>
+        </div>
         </Grid>
       </Grid>
       </div>

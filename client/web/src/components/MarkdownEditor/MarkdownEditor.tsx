@@ -8,15 +8,17 @@ export class MarkdownEditor extends React.Component {
   vditor: any = null;
   componentDidMount () {
       this.vditor = new Vditor('vditor', {
-      height: 600,
+      height: 800,
       lang: 'en_US',
+      icon: 'material',
       toolbarConfig: {
-        pin: true,
+        pin: true
       },
+      mode: "wysiwyg",
       cache: {
         enable: false,
       },
-    })
+    });
   }
   render () {
     return e(
