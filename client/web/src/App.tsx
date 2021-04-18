@@ -9,12 +9,19 @@ import { Document } from './models/Document';
 import { AccountCircle, Delete, Menu, Save, Search } from '@material-ui/icons';
 import { useEffect, useRef, useState } from 'react';
 import "./App.scss";
-import { lightGreen } from '@material-ui/core/colors';
+import { green } from '@material-ui/core/colors';
 import { t } from './localization';
 
 const theme = createMuiTheme({
+  typography: {
+    fontSize: 16,
+    fontFamily: [
+      `"Roboto", "Helvetica", "Arial", sans-serif`,
+    ].join(','),
+    fontWeightRegular: 400,
+},
   palette: {
-    primary: lightGreen,
+    primary: green,
   },
 });
 
@@ -129,7 +136,7 @@ function App() {
     
   return (
     <div className="App">
-      <div> 
+      <ThemeProvider theme={theme}>
         <Grid container>
           <Grid item xs={12}>
           <div className="main-appbar">
@@ -138,7 +145,7 @@ function App() {
               <IconButton edge="start" color="inherit">
                 <Menu />
               </IconButton>
-              <Typography variant="h5">
+              <Typography variant="h5" >
                 {"Minerva"}
               </Typography>
               <div className="main-toolbar-search">
@@ -196,7 +203,6 @@ function App() {
             />
           </Grid>
           <Grid className="btn-save" item xs={2}>
-          <ThemeProvider theme={theme}>
             <Button variant="contained" 
               color="primary"
               startIcon={<Save />}
@@ -204,7 +210,6 @@ function App() {
             >
                 {t("save")}
             </Button>
-          </ThemeProvider>
           </Grid>
         </Grid>
         <div className="markdown-editor">
@@ -212,7 +217,7 @@ function App() {
         </div>
         </Grid>
       </Grid>
-      </div>
+      </ThemeProvider>
     </div>
   );
 }
