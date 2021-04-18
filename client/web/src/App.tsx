@@ -10,6 +10,7 @@ import { AccountCircle, Delete, Menu, Save, Search } from '@material-ui/icons';
 import { useEffect, useRef, useState } from 'react';
 import "./App.scss";
 import { lightGreen } from '@material-ui/core/colors';
+import { t } from './localization';
 
 const theme = createMuiTheme({
   palette: {
@@ -145,7 +146,7 @@ function App() {
                   <Search />
                 </div>
                 <InputBase
-                  placeholder="Search…"
+                  placeholder={t("search")}
                   className="search-field"
                 />
               </div>
@@ -189,7 +190,7 @@ function App() {
           <Grid className="document-title" item xs={10}>
             <TextField onChange={handleChangeTitle} 
                 value={editingDocument.title} 
-                label="Заголовок документа" 
+                label= {t("document-title")}
                 variant="outlined" 
                 fullWidth
             />
@@ -201,7 +202,7 @@ function App() {
               startIcon={<Save />}
               onClick={saveDocument}
             >
-                {"Сохранить"}
+                {t("save")}
             </Button>
           </ThemeProvider>
           </Grid>
