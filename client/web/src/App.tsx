@@ -1,16 +1,20 @@
-/* eslint-disable */
 import { 
-  AppBar, Button, createMuiTheme, Grid, IconButton, InputBase, List, ListItem, ListItemSecondaryAction, 
-  ListItemText, TextField, ThemeProvider, Toolbar, Typography } 
+  Button, createMuiTheme, Grid, TextField, ThemeProvider } 
 from '@material-ui/core';
 import { ApiService } from './ApiService';
 import { MarkdownEditor } from './components/MarkdownEditor/MarkdownEditor';
 import { Document } from './models/Document';
-import { AccountCircle, Delete, Menu, Save, Search } from '@material-ui/icons';
-import { useEffect, useRef, useState } from 'react';
+import { Save } from '@material-ui/icons';
+import React, { useEffect, useRef, useState } from 'react';
 import "./App.scss";
 import { green } from '@material-ui/core/colors';
 import { t } from './localization';
+import { AppToolbar } from './components/AppToolbar/AppToolbar';
+import { ListDocuments } from './components/ListDocuments/ListDocuments';
+import { ResultPanel } from './components/ResultPanel/ResultPanel';
+import { AuthModal } from './components/AuthModal/AuthModal';
+import { User } from './models/User';
+import background from './images/background.jpg' // relative path to image 
 
 const theme = createMuiTheme({
   typography: {
@@ -28,6 +32,9 @@ const theme = createMuiTheme({
 function App() {
   const markdownEditor = useRef<MarkdownEditor>(null);
   const [documents, setDocuments] = useState<Array<Document>>([]);
+  const [tags, setTags] = useState<Array<string>>([]);
+  const [user, setUser] = useState<User>();
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(true);
   const [editingDocument, setEditingDocument] = useState<Document>({
     body: " ",
     created: new Date().toString(),
@@ -43,16 +50,32 @@ function App() {
     _id: ""
   });
 
+  const users:Array<User> = [
+    {
+      id: "607946f2381b9030b41eecdb",
+      name: "Лелюх Николай Николаевич"
+    },
+    {
+      id: "60793c2d9e95560b283ca765",
+      name: "Мохов Михаил Сергеевич"
+    }
+  ];
+
   /**
    * Load all documents on mount component
    */
   useEffect(() => {
-    const apiService = new ApiService(); 
-    void (async () => {
-      const result = await apiService.GetAllDocuments()
-      setDocuments(result);
-    })();
-  }, []); 
+    if(user){
+      const apiService = new ApiService(); 
+      void (async () => {
+        const documentList = await apiService.GetAllUserDocuments(user.id)
+        setDocuments(documentList);
+
+        const tagsList = await apiService.GetAllTags(user.id)
+        setTags(tagsList.tags);
+      })();
+    }
+  }, [user]); 
 
   /**
    * Load document to markdown editor 
@@ -65,8 +88,8 @@ function App() {
   }, [editingDocument._id]); 
 
 
-  const documentListItemClick = ( event: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => {
-    setEditingDocument(documents[index]);
+  function documentItemClick (id: string): void {
+    setEditingDocument(documents.filter(item => item._id === id)[0]);
   };
 
   function saveDocument(): void {
@@ -104,10 +127,12 @@ function App() {
       })();
     }
     else {
-      void (async () => {
-        const result = await apiService.AddDocument(savingDocument)
-        setDocuments([...documents, result]);
-      })();
+      if(user) {
+        void (async () => {
+          const result = await apiService.AddDocument(user.id, savingDocument)
+          setDocuments([...documents, result]);
+        })();
+      }
     }
   }
 
@@ -133,91 +158,64 @@ function App() {
   function handleChangeTitle(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {
     setEditingDocument({...editingDocument, title: e.target.value});
   }
+
+  function onUserItemClick(userAuth: User): void {
+    setUser(userAuth);
+    setIsAuthModalOpen(false);
+  }
+  
+  function onUserIconClick(): void {
+    setUser(undefined);
+    setIsAuthModalOpen(true);
+  }
     
   return (
     <div className="App">
-      <ThemeProvider theme={theme}>
-        <Grid container>
-          <Grid item xs={12}>
-          <div className="main-appbar">
-            <AppBar color="primary" position="static">
-            <Toolbar>
-              <IconButton edge="start" color="inherit">
-                <Menu />
-              </IconButton>
-              <Typography variant="h5" >
-                {"Minerva"}
-              </Typography>
-              <div className="main-toolbar-search">
-                <div className="search-icon">
-                  <Search />
-                </div>
-                <InputBase
-                  placeholder={t("search")}
-                  className="search-field"
-                />
-              </div>
-              <IconButton edge = "end"
-                  color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-            </Toolbar>
-          </AppBar>
-        </div>
-        </Grid>
-        <Grid item xs={3}>
-          <div className="document-list">
-          <List dense={true}>
-                {documents.map( (item, index) => {
-                  return(
-                    <div className="document-list-item">
-                    <ListItem  
-                      key={item._id} 
-                      button
-                      onClick={(event) => documentListItemClick(event, index)}
-                    >
-                    <ListItemText
-                      primary={item.title}
-                    />
-                    <ListItemSecondaryAction>
-                      <IconButton onClick={(event) => deleteDocument(event, index)} edge="end" aria-label="delete">
-                        <Delete />
-                      </IconButton>
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                  </div>
-                  )}
-                )}
-          </List>
-          </div>
-        </Grid>
-        <Grid item xs={9}>
-        <Grid container>
-          <Grid className="document-title" item xs={10}>
-            <TextField onChange={handleChangeTitle} 
-                value={editingDocument.title} 
-                label= {t("document-title")}
-                variant="outlined" 
-                fullWidth
-            />
+      <AuthModal isOpen={isAuthModalOpen} users={users} onUserItemClick={onUserItemClick} />
+      {user ?
+        <ThemeProvider theme={theme}>
+          <AppToolbar userName={user?.name} onUserIconClick={onUserIconClick}/>
+          <Grid container>
+            <Grid item xs={3}>
+              <ListDocuments 
+                tagsItems={tags}
+                documentItems={documents}
+                onDocumentItemClick={documentItemClick} />
+            </Grid>
+            <Grid item xs={3}>
+              <ResultPanel />
+            </Grid>
+            <Grid item xs={6}>
+              <Grid container>
+                <Grid className="document-title" item xs={9}>
+                  <TextField onChange={handleChangeTitle} 
+                      value={editingDocument.title} 
+                      label= {t("document-title")}
+                      variant="outlined" 
+                      fullWidth
+                  />
+                </Grid>
+                <Grid className="btn-save" item xs={3}>
+                  <Button variant="contained" 
+                    color="primary"
+                    startIcon={<Save />}
+                    onClick={saveDocument}
+                  >
+                      {t("save")}
+                  </Button>
+                </Grid>
+              </Grid>
+              <Grid className="markdown-editor" item xs={12}>
+                <MarkdownEditor ref={markdownEditor}/>
+              </Grid>
+            </Grid>
           </Grid>
-          <Grid className="btn-save" item xs={2}>
-            <Button variant="contained" 
-              color="primary"
-              startIcon={<Save />}
-              onClick={saveDocument}
-            >
-                {t("save")}
-            </Button>
-          </Grid>
-        </Grid>
-        <div className="markdown-editor">
-          <MarkdownEditor ref={markdownEditor}/>
-        </div>
-        </Grid>
-      </Grid>
-      </ThemeProvider>
+        </ThemeProvider>
+        :
+       <React.Fragment>
+        <img src={background}/>
+       </React.Fragment>
+      }
     </div>
   );
 }

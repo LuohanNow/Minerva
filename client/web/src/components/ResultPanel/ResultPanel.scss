@@ -1,0 +1,31 @@
+.result-panel {
+  padding: 10px;
+
+  .search {
+    background-color: fade-out(rgb(214, 208, 208), 0.25);
+    position: relative;
+    border-radius: 15px;
+    width: auto;
+    margin-left: auto;
+
+    &:hover {
+      background-color: fade-out(rgb(241, 237, 237), 0.35);
+    }
+    
+    .search-icon {
+      padding: 0px 4px;
+      height: 100%;
+      position: absolute;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .search-field{
+      padding: 1px 1px 1px 0px;
+      padding-left: calc(2em);
+      width: 100%;
+    }
+  }
+}

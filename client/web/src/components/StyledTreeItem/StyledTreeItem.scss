@@ -1,0 +1,15 @@
+.styled-tree-item {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+
+  .label-icon {
+    margin-right: 5px;
+    color: gray;
+  }
+
+  .label-text {
+    font-weight: inherit;
+    flex-grow: 1;
+  }
+}
