@@ -7,6 +7,7 @@ import { IVerifyOptions } from "passport-local";
 import crypto from "crypto";
 import { CallbackError, NativeError } from "mongoose";
 
+
 export let signUp = (req: Request, res: Response, next: NextFunction) => {
     //User.register(new User({ username: req.body.username }),
     //  req.body.password, (err, user) => {
@@ -30,43 +31,26 @@ export let signUp = (req: Request, res: Response, next: NextFunction) => {
     //    }
     //  })
   const user = new User({
+      //_id: new mongoose.Types.ObjectId(),
       username: req.body.username,
       email: req.body.email,
       password: req.body.password
   });
 
-  User.findOne({ email: req.body.email }, (err: NativeError, existingUser: UserDocument) => {
-      if (err) { res.statusCode = 500;
-            res.setHeader('Content-Type', 'application/json');
-            res.json({
-                err: err
-             });
-             res.send();
-            }
+User.findOne({ email: req.body.email }, (err: NativeError, existingUser: UserDocument) => {
+      if (err) { res.send("error while find user"); }
       if (existingUser) {
-        res.setHeader('Content-Type', 'application/json');
          res.send("user already exist");
-      }
-      user.save((err) => {
-          if (err) {res.statusCode = 500;
-            res.setHeader('Content-Type', 'application/json');
-            res.json({
-                err: err
-             });
-             res.send(); }
+      } else{
+          user.save((err) => {
+          if (err) {res.send("error while save new user"); }
           req.logIn(user, (err) => {
-              if (err) {
-                res.statusCode = 500;
-                res.setHeader('Content-Type', 'application/json');
-                res.json({
-                    err: err
-                 });
-                 res.send();
-              }
-              res.statusCode = 200;
-              res.send("Success login");
+              if (err) { res.send("error while login new user"); }
+              res.send(user._id);
           });
       });
+      }
+      
   });
  }
 
@@ -91,7 +75,7 @@ export let signUp = (req: Request, res: Response, next: NextFunction) => {
         req.logIn(user, (err) => {
           if (err) { res.send("incorrect user data"); }
           else{
-          res.send("success login");
+          res.send(user._id);
           }
         });
       }
@@ -117,11 +101,19 @@ export let logOut = (req: Request, res: Response, next: NextFunction) => {
     //    res.status(403);
     //    next(err);
     //  }
-    req.logout();
-    res.statusCode = 200;
-            res.setHeader('Content-Type', 'application/json');
-            res.json({
-            success: true,
-            status: 'You are successfully logged out!'
-          });
+    req.session.destroy(function(err){
+      if(err){
+         console.log(err);
+      }else{
+        req.logout();
+      }
+   });
+   req.logout();
+   res.send("success logout");
+    //res.statusCode = 200;
+    //        res.setHeader('Content-Type', 'application/json');
+    //        res.json({
+    //        success: true,
+    //        status: 'You are successfully logged out!'
+    //      });
 }

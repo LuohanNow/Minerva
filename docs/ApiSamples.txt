@@ -1,8 +1,9 @@
 get https://minerva-server-app.herokuapp.com/document/605a29ccc6017ad5c581dbe0
-get https://minerva-server-app.herokuapp.com/documents
+get https://minerva-server-app.herokuapp.com/documents?userid=607946f2381b9030b41eecdb
+get https://minerva-server-app.herokuapp.com/tags?userid=60793c2d9e95560b283ca765
+return tag: collection of tags
 
-post https://minerva-server-app.herokuapp.com/document
-
+post https://minerva-server-app.herokuapp.com//document?userid=607946f2381b9030b41eecdb
 {
     "url": "test number insert test",
     "title": "test  number insert test",
@@ -15,8 +16,32 @@ post https://minerva-server-app.herokuapp.com/document
     "markup": "markdown",
     "docHistory": ""
 }
+return document
+
+post https://minerva-server-app.herokuapp.com/search?userid=60793c2d9e95560b283ca765
+{
+ "info": "Небольшой"
+}
+return collection of documents
+post https://minerva-server-app.herokuapp.com/signup
+{
+   "username": "tester3",
+   "email": "test3@mail.ru",
+   "password": "pass323"
+}
+return userid
+post https://minerva-server-app.herokuapp.com/login
+{
+   "username": "tester3",
+   "email": "test3@mail.ru",
+   "password": "pass323"
+}
+return userid
+https://minerva-server-app.herokuapp.com/logout
+return message
 
 delete https://minerva-server-app.herokuapp.com/document/*EXISTING ID*
+return message
 
 put https://minerva-server-app.herokuapp.com/document/605a29ccc6017ad5c581dbe0
 
@@ -32,6 +57,7 @@ put https://minerva-server-app.herokuapp.com/document/605a29ccc6017ad5c581dbe0
     "markup": "markdown",
     "docHistory": ""
 }
+return message
 
 
 

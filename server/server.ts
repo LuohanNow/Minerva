@@ -112,8 +112,10 @@ app.get('/Services', (req: express.Request, res: express.Response) => {
 
 // Document API Endpoints
 app.get("/documents", documentController.allDocuments);
+app.get("/tags", documentController.allTags);
 app.get("/document/:id", documentController.getDocument);
 app.post("/document", documentController.addDocument);
+app.post("/search", documentController.searchText);
 app.put("/document/:id", documentController.updateDocument);
 app.delete("/document/:id", documentController.deleteDocument)
 

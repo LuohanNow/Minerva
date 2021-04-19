@@ -5,9 +5,11 @@ import crypto from "crypto";
 //import passportLocalMongoose = require('passport-local-mongoose');
 
 export type UserDocument = mongoose.Document & {
+    //_id: mongoose.Schema.Types.ObjectId,
     username: string;
     password: string;
     email: string;
+    //documents: [{type:mongoose.Schema.Types.ObjectId, ref: 'Document'}]
 
     comparePassword: comparePasswordFunction;
 }
@@ -15,9 +17,11 @@ export type UserDocument = mongoose.Document & {
 type comparePasswordFunction = (candidatePassword: string, cb: (err: any, isMatch: any) => void) => void;
 
 export const UserSchema = new mongoose.Schema<UserDocument>({
+  //_id: {type: mongoose.Schema.Types.ObjectId, unique: true, required: false},
   username: { type: String, unique: true, required: true },
   password: { type: String, required: true },
   email: { type: String, required: true },
+  //documents: [{type:mongoose.Schema.Types.ObjectId, ref: 'Document'}]
 }); // { _id: false });
 
 UserSchema.pre("save", function save(next) {
