@@ -1,11 +1,25 @@
 import { Document, DocumentWithoutId } from "./models/Document";
+import { Tags } from "./models/Tags";
 
 export class ApiService {
 
-	GetAllDocuments(): Promise<Array<Document>> {
+	GetAllTags(userId: string): Promise<Tags> {
 		return new Promise(resolve => {
 			void (async () => {
-				const response = await fetch('https://minerva-server-app.herokuapp.com/documents', {
+				const response = await fetch(`https://minerva-server-app.herokuapp.com/tags?userid=${userId}`, {
+					method: 'GET',
+					mode: "cors",
+				});
+				const tags = await response.json() as Promise<Tags>
+				resolve(tags);
+			})();
+		});
+	}
+
+	GetAllUserDocuments(userId: string): Promise<Array<Document>> {
+		return new Promise(resolve => {
+			void (async () => {
+				const response = await fetch(`https://minerva-server-app.herokuapp.com/documents?userid=${userId}`, {
 					method: 'GET',
 					mode: "cors",
 				});
@@ -50,8 +64,8 @@ export class ApiService {
 		});
 	}
 
-	AddDocument(documentBody: DocumentWithoutId): Promise<Document> {
-		const url = `https://minerva-server-app.herokuapp.com/document`;
+	AddDocument(userId: string, documentBody: DocumentWithoutId): Promise<Document> {
+		const url = `https://minerva-server-app.herokuapp.com/document?userid=${userId}`;
 
 		return new Promise(resolve => {
 			void (async () => {
