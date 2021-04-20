@@ -10,7 +10,7 @@
         "strict": true,
         "noImplicitAny": true,
         "esModuleInterop": true, 
-        "sourceMap": false,
+        "sourceMap": true,
         "resolveJsonModule": true
         // "outFile": "js/app.js"
     },
