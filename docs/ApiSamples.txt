@@ -1,5 +1,6 @@
 get https://minerva-server-app.herokuapp.com/document/605a29ccc6017ad5c581dbe0
 get https://minerva-server-app.herokuapp.com/documents?userid=607946f2381b9030b41eecdb
+get https://minerva-server-app.herokuapp.com/documentsbytag?userid=60793c2d9e95560b283ca765&tag=test
 get https://minerva-server-app.herokuapp.com/tags?userid=60793c2d9e95560b283ca765
 return tag: collection of tags
 
