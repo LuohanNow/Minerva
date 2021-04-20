@@ -9,6 +9,7 @@ import {Book, Note, LabelImportant, LocalOffer} from '@material-ui/icons';
 type ListDocumentsProps = {
   documentItems: Array<Document>;
   onDocumentItemClick(id: string): void;
+  onTagItemClick(id: string): void;
   tagsItems: Array<string>;
 }
 
@@ -41,6 +42,7 @@ export function ListDocuments(props: ListDocumentsProps) {
             {props.tagsItems.map( (item, index) => {
               return(  
                 <StyledTreeItem
+                  onClick={() => props.onTagItemClick(item)}
                   nodeId={`tag${index}`}
                   labelText={item}
                   labelIcon={LabelImportant}

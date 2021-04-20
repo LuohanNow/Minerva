@@ -35,8 +35,8 @@ export function AuthModal(props: AuthModalProps) {
             {props.users.map((user) => (
               <ListItem button onClick={() => props.onUserItemClick(user)} key={user.id}>
                 <ListItemAvatar>
-                  <Avatar >
-                    <Person />
+                  <Avatar>
+                    <Person color="error"/>
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText primary={user.name} />
