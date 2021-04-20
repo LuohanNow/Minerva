@@ -112,6 +112,7 @@ app.get('/Services', (req: express.Request, res: express.Response) => {
 
 // Document API Endpoints
 app.get("/documents", documentController.allDocuments);
+app.get("/documentsbytag", documentController.allDocumentsByTag);
 app.get("/tags", documentController.allTags);
 app.get("/document/:id", documentController.getDocument);
 app.post("/document", documentController.addDocument);

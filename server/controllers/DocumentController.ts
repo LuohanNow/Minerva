@@ -13,6 +13,18 @@ export let allDocuments = (req: Request, res: Response) => {
       });
 };
 
+export let allDocumentsByTag = (req: Request, res: Response) => {
+  var user_id: string = req.query.userid as string;
+  var tag: string = req.query.tag as string;
+    let documents = Document.find({ author: mongoose.Types.ObjectId(user_id), tags: tag } ,(err: any, documents: any) => {
+        if (err) {
+          res.send("Error!");
+        } else {
+          res.send(documents);
+        }
+      });
+};
+
 
 export let allTags = (req: Request, res: Response) => {
   var tags: string[] = []; 
