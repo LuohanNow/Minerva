@@ -19,7 +19,7 @@ export class ApiService {
 	GetAllUserDocumentsByTag(userId: string, tag: string): Promise<Array<Document>> {
 		return new Promise(resolve => {
 			void (async () => {
-				const response = await fetch(`https://minerva-server-app.herokuapp.com/documents?userid=${userId}&tag=${tag}`, {
+				const response = await fetch(`https://minerva-server-app.herokuapp.com/documentsbytag?userid=${userId}&tag=${tag}`, {
 					method: 'GET',
 					mode: "cors",
 				});
