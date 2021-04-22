@@ -16,6 +16,29 @@ export class ApiService {
 		});
 	}
 
+	SearchDocuments(userId: string, searchText: string): Promise<Array<Document>> {
+		return new Promise(resolve => {
+			void (async () => {
+				const response = await fetch(`https://minerva-server-app.herokuapp.com/search?userid=${userId}`, {
+					method: 'POST', 
+					body: JSON.stringify({
+						info: searchText
+					}), 
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				});
+				
+				try {
+					const foundDocuments = await response.json() as Promise<Array<Document>>
+					resolve(foundDocuments);
+				} catch{
+					resolve([]);
+				}
+			})();
+		});
+	}
+
 	GetAllUserDocumentsByTag(userId: string, tag: string): Promise<Array<Document>> {
 		return new Promise(resolve => {
 			void (async () => {

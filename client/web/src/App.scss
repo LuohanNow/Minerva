@@ -5,3 +5,14 @@
 .btn-save {
   padding: 20px;
 }
+
+.fab {
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+  z-index: 1;
+
+  .fab-add {
+    color: white;
+  }
+}

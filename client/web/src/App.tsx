@@ -1,10 +1,10 @@
 import { 
-  Button, createMuiTheme, Grid, TextField, ThemeProvider } 
+  Button, createMuiTheme, Fab, Grid, TextField, ThemeProvider } 
 from '@material-ui/core';
 import { ApiService } from './ApiService';
 import { MarkdownEditor } from './components/MarkdownEditor/MarkdownEditor';
 import { Document } from './models/Document';
-import { Save } from '@material-ui/icons';
+import {Add, Save } from '@material-ui/icons';
 import React, { useEffect, useRef, useState } from 'react';
 import "./App.scss";
 import { green } from '@material-ui/core/colors';
@@ -29,6 +29,21 @@ const theme = createMuiTheme({
   },
 });
 
+const emptyDocument: Document = {
+  body: " ",
+  created: new Date().toString(),
+  docHistory: " ",
+  lastEditBy: " ",
+  lastEditedBy: " ",
+  markup: " ",
+  subtitle: " ",
+  tags: [],
+  title: " ",
+  updated: new Date().toString(),
+  url: " ",
+  _id: ""
+}
+
 function App() {
   const markdownEditor = useRef<MarkdownEditor>(null);
   const [documents, setDocuments] = useState<Array<Document>>([]);
@@ -36,20 +51,7 @@ function App() {
   const [tags, setTags] = useState<Array<string>>([]);
   const [user, setUser] = useState<User>();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(true);
-  const [editingDocument, setEditingDocument] = useState<Document>({
-    body: " ",
-    created: new Date().toString(),
-    docHistory: " ",
-    lastEditBy: " ",
-    lastEditedBy: " ",
-    markup: " ",
-    subtitle: " ",
-    tags: [],
-    title: " ",
-    updated: new Date().toString(),
-    url: " ",
-    _id: ""
-  });
+  const [editingDocument, setEditingDocument] = useState<Document>(emptyDocument);
 
   const users:Array<User> = [
     {
@@ -165,8 +167,25 @@ function App() {
     setIsAuthModalOpen(true);
   }
 
-  function onDocumentItemClick (id: string): void {
+  function onDocumentItemClick(id: string): void {
     setEditingDocument(documents.filter(item => item._id === id)[0]);
+  };
+  
+  function createNewDocument(): void {
+    setEditingDocument(emptyDocument);
+  };
+ 
+  function onSearch(textSearch: string): void {
+    const apiService = new ApiService();
+
+    if(user) { 
+        void (async () => {
+        apiService.SearchDocuments(user.id, textSearch)
+        .then(result => {
+            setFindedDocuments(result);
+        }); 
+      })();
+    }
   };
 
   function onTagItemClick (tag: string): void {
@@ -181,14 +200,16 @@ function App() {
       })();
     }
   };
-    
+
   return (
     <div className="App">
       <AuthModal isOpen={isAuthModalOpen} users={users} onUserItemClick={onUserItemClick} />
       {user ?
         <ThemeProvider theme={theme}>
-          <AppToolbar userName={user?.name} onUserIconClick={onUserIconClick}/>
           <Grid container>
+            <Grid item xs={12}>
+              <AppToolbar userName={user?.name} onUserIconClick={onUserIconClick}/>
+            </Grid>
             <Grid item xs={3}>
               <ListDocuments 
                 tagsItems={tags}
@@ -197,7 +218,9 @@ function App() {
                 onDocumentItemClick={onDocumentItemClick} />
             </Grid>
             <Grid item xs={3}>
-              <ResultPanel onResultItemClick={onDocumentItemClick} documentItems={findedDocuments}/>
+              <ResultPanel onResultItemClick={onDocumentItemClick} 
+                onSearch={onSearch}
+                documentItems={findedDocuments}/>
             </Grid>
             <Grid item xs={6}>
               <Grid container>
@@ -224,6 +247,15 @@ function App() {
               </Grid>
             </Grid>
           </Grid>
+          <div className="fab">
+            <Fab
+              color="primary"
+              className="fab-add"
+              onClick={createNewDocument}
+            >
+              <Add/>
+            </Fab>
+          </div>
         </ThemeProvider>
         :
        <React.Fragment>
