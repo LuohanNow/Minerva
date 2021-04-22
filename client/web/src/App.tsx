@@ -32,6 +32,7 @@ const theme = createMuiTheme({
 function App() {
   const markdownEditor = useRef<MarkdownEditor>(null);
   const [documents, setDocuments] = useState<Array<Document>>([]);
+  const [findedDocuments, setFindedDocuments] = useState<Array<Document>>([]);
   const [tags, setTags] = useState<Array<string>>([]);
   const [user, setUser] = useState<User>();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(true);
@@ -86,11 +87,6 @@ function App() {
       markdownEditor.current?.vditor.setValue(editingDocument.body);
     } catch (error) {}
   }, [editingDocument._id]); 
-
-
-  function documentItemClick (id: string): void {
-    setEditingDocument(documents.filter(item => item._id === id)[0]);
-  };
 
   function saveDocument(): void {
     const apiService = new ApiService();
@@ -168,6 +164,23 @@ function App() {
     setUser(undefined);
     setIsAuthModalOpen(true);
   }
+
+  function onDocumentItemClick (id: string): void {
+    setEditingDocument(documents.filter(item => item._id === id)[0]);
+  };
+
+  function onTagItemClick (tag: string): void {
+    const apiService = new ApiService();
+
+    if(user) { 
+        void (async () => {
+        apiService.GetAllUserDocumentsByTag(user.id, tag)
+        .then(result => {
+            setFindedDocuments(result);
+        }); 
+      })();
+    }
+  };
     
   return (
     <div className="App">
@@ -180,10 +193,11 @@ function App() {
               <ListDocuments 
                 tagsItems={tags}
                 documentItems={documents}
-                onDocumentItemClick={documentItemClick} />
+                onTagItemClick={onTagItemClick}
+                onDocumentItemClick={onDocumentItemClick} />
             </Grid>
             <Grid item xs={3}>
-              <ResultPanel />
+              <ResultPanel onResultItemClick={onDocumentItemClick} documentItems={findedDocuments}/>
             </Grid>
             <Grid item xs={6}>
               <Grid container>
