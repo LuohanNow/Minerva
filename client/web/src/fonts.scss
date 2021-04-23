@@ -1,0 +1,28 @@
+$MontserratFontPath: './fonts';
+$MontserratFontFamily: 'Montserrat';
+$MontserratFontVersion: 2;
+
+// Объявляем миксин
+@mixin font-face($fontFamily, $fileName, $fontWeight, $fontStyle, $fontPath: $MontserratFontPath) {
+    @font-face {
+        font-family: $fontFamily;
+        src: url('#{$fontPath}/#{$fileName}.eot');
+        src: local('^'),
+        url('#{$fontPath}/#{$fileName}.eot?#iefix') format('embedded-opentype'),
+        url('#{$fontPath}/#{$fileName}.woff2?v=#{$MontserratFontVersion}') format('woff2'),
+        url('#{$fontPath}/#{$fileName}.woff?v=#{$MontserratFontVersion}') format('woff'),
+        url('#{$fontPath}/#{$fileName}.ttf?v=#{$MontserratFontVersion}') format('truetype');
+        font-weight: $fontWeight;
+        font-style: $fontStyle;
+    }
+}
+
+// Кратенько подключаем нужные шрифты и их варианты
+@include font-face($MontserratFontFamily, 'Montserrat ExtraLight', 200, normal);
+@include font-face($MontserratFontFamily, 'Montserrat ExtraLight Italic', 200, italic);
+
+@include font-face($MontserratFontFamily, 'Montserrat Regular', 400, normal);
+@include font-face($MontserratFontFamily, 'Montserrat Italic', 400, italic);
+
+@include font-face($MontserratFontFamily, 'Montserrat Bold', 700, normal);
+@include font-face($MontserratFontFamily, 'Montserrat Bold Italic', 700, italic);

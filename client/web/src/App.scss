@@ -4,6 +4,12 @@
 
 .btn-save {
   padding: 20px;
+
+  .MuiButton-root {
+    background-color: #fcc121;
+    color: #33393D;
+    font-weight: 500;
+   }
 }
 
 .fab {
@@ -13,6 +19,7 @@
   z-index: 1;
 
   .fab-add {
-    color: white;
+    color: #33393D;
+    background-color: #fcc121;
   }
 }

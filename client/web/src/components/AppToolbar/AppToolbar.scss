@@ -1,6 +1,29 @@
+@import "./../../fonts.scss";
 .main-appbar {
     .user-btn {
         margin-left: auto;
         margin-right: 0;
     }
+
+    .appbar{
+        background-color: #2a90e4;
+    }
+}
+
+.typography {
+    color: #f7f5f0;
+    font-family: Montserrat;
+}
+
+.iconButton {
+    background-color: #f7f5f0;
+}
+
+.menu {
+    fill: #f7f5f0 !important;
+}
+
+.accountCircle {
+    fill: #f7f5f0 !important;
+    margin-right: 5px;
 }
