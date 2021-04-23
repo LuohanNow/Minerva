@@ -234,9 +234,9 @@ function App() {
                 </Grid>
                 <Grid className="btn-save" item xs={3}>
                   <Button variant="contained" 
-                    color="primary"
                     startIcon={<Save />}
                     onClick={saveDocument}
+                    className="button-save"
                   >
                       {t("save")}
                   </Button>

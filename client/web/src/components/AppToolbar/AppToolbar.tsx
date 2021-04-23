@@ -10,12 +10,12 @@ type AppToolbarProps = {
 export function AppToolbar(props: AppToolbarProps) {
   return (
           <div className="main-appbar">
-            <AppBar color="primary" position="static">
+            <AppBar position="static" className="appbar">
             <Toolbar>
-              <IconButton edge="start" color="inherit">
-                <Menu />
+              <IconButton edge="start" className="iconButton">
+                <Menu className="menu" />
               </IconButton>
-              <Typography variant="h5" >
+              <Typography variant="h5" className="typography">
                 {"Minerva"}
               </Typography>
               <IconButton 
@@ -23,8 +23,8 @@ export function AppToolbar(props: AppToolbarProps) {
                   className="user-btn" edge = "end"
                   color="inherit"
               >
-                <AccountCircle />
-                <Typography>
+                <AccountCircle className="accountCircle" />
+                <Typography className="typography">
                   {props.userName}
                 </Typography>
               </IconButton>
